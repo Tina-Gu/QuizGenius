@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load crispy_forms_filters %}
+{% load static %}
 
 {% block content %}
     <div class="card m-2 w-25">
@@ -8,7 +8,7 @@
             <h4 class="card-title">Login</h4>
             <form method="post">
                 {% csrf_token %}
-                {{ form | crispy }}
+                {{ form.as_p }}
 {#                <input class="login" type="submit" value="Login">#}
                 <button type="submit">Login</button>
             </form>

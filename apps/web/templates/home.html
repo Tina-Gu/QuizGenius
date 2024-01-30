@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Display Quiz Categories -->
+    <h2>Quiz Categories</h2>
+    <ul>
+        {% for category in categories %}
+        <li>{{ category.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Display Recent Quizzes for Logged-in User -->
+    {% if user_quizzes %}
+        <h2>Recent Quizzes</h2>
+        <table>
+            <tr>
+                <th>Quiz Name</th>
+                <th>Taken Time</th>
+                <!-- Include other headers like 'Result' -->
+            </tr>
+            {% for quiz in user_quizzes %}
+            <tr>
+                <td>{{ quiz.name }}</td>
+                <td>{{ quiz.time_start }}</td>
+                <!-- Include other details like 'Result' and link to result page -->
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

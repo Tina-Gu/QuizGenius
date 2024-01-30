@@ -122,6 +122,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 3. Define where to redirect the user after a successful login
 
 LOGIN_REDIRECT_URL = 'base'
-LOGOUT_REDIRECT_URL = "base"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'  # or bootstrap3, uni_form, etc.
 AUTH_USER_MODEL = 'web.CustomUser'

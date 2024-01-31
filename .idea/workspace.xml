@@ -4,21 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="776670ed-75a5-47a7-b16d-8b2191c08438" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/web/migrations/0002_alter_quiz_time_start.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/templates/home.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/templates/quiz.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/templates/quiz_result.html" afterDir="false" />
+    <list default="true" id="776670ed-75a5-47a7-b16d-8b2191c08438" name="Changes" comment="/">
+      <change afterPath="$PROJECT_DIR$/apps/web/migrations/0002_alter_quizquestion_user_choice.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/templates/user_management/question_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/templates/user_management/question_management.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/templates/user_management/user_management.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/templates/user_management/user_quiz_management.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/web/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/web/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/migrations/0002_alter_quiz_time_start.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/web/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/web/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/templates/registration/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/templates/registration/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/templates/registration/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/templates/registration/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/templates/quiz.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/templates/quiz.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/templates/quiz_result.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/templates/quiz_result.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/web/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/asgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/asgi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/wsgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/wsgi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,6 +47,26 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Tina-Gu"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="c8e45c15-bb17-4089-adc6-63f601bbf864" />
+        <option name="url" value="https://github.com/Tina-Gu/QuizGenius.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/apps/web/views.py" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -57,6 +83,9 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "DefaultHtmlFileTemplate": "HTML File",
     "Django Server.QuizGenius.executor": "Run",
+    "Django tests.Test: apps.web.migrations.executor": "Run",
+    "Python.0002_alter_quizquestion_user_choice.executor": "Run",
+    "Python.views.executor": "Run",
     "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -66,7 +95,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -82,7 +111,74 @@
       <recent name="$PROJECT_DIR$/apps" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Django Server.QuizGenius">
+    <configuration name="Test: apps.web.migrations" type="DjangoTestsConfigurationType" temporary="true">
+      <module name="QuizGenius" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="TARGET" value="apps.web.migrations" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="0002_alter_quizquestion_user_choice" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="QuizGenius" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/apps/web/migrations" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/apps/web/migrations/0002_alter_quizquestion_user_choice.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="views" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="QuizGenius" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/apps/web" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/apps/web/views.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="QuizGenius" type="Python.DjangoServer" factoryName="Django server">
       <module name="QuizGenius" />
       <option name="ENV_FILES" value="" />
@@ -108,6 +204,13 @@
       <option name="customRunCommand" value="" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Django tests.Test: apps.web.migrations" />
+        <item itemvalue="Python.0002_alter_quizquestion_user_choice" />
+        <item itemvalue="Python.views" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -126,14 +229,42 @@
       <updated>1706408562226</updated>
       <workItem from="1706408565001" duration="18245000" />
       <workItem from="1706508423683" duration="1089000" />
-      <workItem from="1706544490934" duration="19694000" />
+      <workItem from="1706544490934" duration="19900000" />
+      <workItem from="1706641192864" duration="34434000" />
     </task>
+    <task id="LOCAL-00001" summary="/">
+      <option name="closed" value="true" />
+      <created>1706589612002</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1706589612002</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="/" />
+    <option name="LAST_COMMIT_MESSAGE" value="/" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/QuizGenius$Test__apps_web_migrations.coverage" NAME="Test: apps.web.migrations Coverage Results" MODIFIED="1706675717481" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/QuizGenius$views.coverage" NAME="views Coverage Results" MODIFIED="1706672697972" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/web" />
+    <SUITE FILE_PATH="coverage/QuizGenius$0002_alter_quizquestion_user_choice.coverage" NAME="0002_alter_quizquestion_user_choice Coverage Results" MODIFIED="1706673971092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/web/migrations" />
   </component>
 </project>

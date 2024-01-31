@@ -17,16 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from apps.web.views import *
+from django.contrib.auth.views import LogoutView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('base/', base, name='base'),
     path("", home.as_view(), name="home"),
-    path("login/", MyLoginView.as_view(template_name='login.html'), name="login"),
-    path("signup/", SignUpView.as_view(), name="register"),
     path("home/", home.as_view(), name="home"),
-    path('quiz/<int:id>/', QuizView.as_view(), name='quiz'),
-
-
-    # path('register/', views.register(), name='register'),
+    path("login/", MyLoginView.as_view(template_name='registration/login.html'), name="login"),
+    path("signup/", SignUpView.as_view(), name="register"),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('category/<str:category_name>/quizzes/<int:quiz_id>', QuizView.as_view(), name='quiz'),
+    path('category/<str:category_name>/start', QuizStartView.as_view(), name='quiz'),
+    path('result/<int:pk>/', QuizResultView.as_view(), name='quiz_result'),
+    path('user_management/', UserListView.as_view(), name='user_management'),
+    path('user_quiz_management/', UserQuizListView.as_view(), name='user_quiz_management'),
+    path('question_management/', UserQuestionListView.as_view(), name='question_management'),
+    path('question_detail/<int:pk>', QuestionDetailListView.as_view(), name='question_detail'),
 ]

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if request.user.is_staff or request.user.is_superuser %}
+        <form method="get">
+            <label for="category">Category:</label>
+            <input type="text" name="category" id="category">
+
+            <label for="user">User:</label>
+            <input type="text" name="user" id="user">
+
+            <button type="submit">Filter</button>
+        </form>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Taken Time</th>
+                <th>Category</th>
+                <th>User Full Name</th>
+                <th>Score</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz in quizzes %}
+            <tr onclick="window.location.href='{% url 'quiz_result' quiz.id %}';">
+                <td>{{ quiz.calculate_duration }}</td>
+                <td>{{ quiz.category.name }}</td>
+                <td>{{ quiz.get_user_name }}</td>
+                <td>{{ quiz.get_score }}</td>
+                <td><a href="{% url 'quiz_result' quiz.id%}">{{ quiz.get_result }}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

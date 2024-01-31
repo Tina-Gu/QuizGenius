@@ -1,5 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <h1>{{ quiz.name }} Results</h1>
+    <p>User: {{ quiz.user.get_full_name }}</p>
+    <p>Category: {{ category }}</p>
+    <p>Score: {{ score }}</p>
+    <p>Start Time: {{ quiz.time_start }}</p>
+    <p>End Time: {{ quiz.time_end }}</p>
 
-{%  endblock %}
+    {% if passed %}
+      <p>Result: Passed</p>
+    {% else %}
+      <p>Result: Failed</p>
+{% endif %}
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Question</th>
+            <th>Selected Answer</th>
+            <th>Correct Answer</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in results %}
+            <tr>
+                <td>{{ result.question }}</td>
+                <td>{{ result.selected_choice }}</td>
+                <td>{{ result.correct_choice }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

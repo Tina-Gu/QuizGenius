@@ -112,6 +112,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
@@ -121,6 +122,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 3. Define where to redirect the user after a successful login
 
-LOGIN_REDIRECT_URL = 'base'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = "login"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'  # or bootstrap3, uni_form, etc.
 AUTH_USER_MODEL = 'web.CustomUser'

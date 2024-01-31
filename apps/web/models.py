@@ -42,6 +42,9 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username} profile'
 
+    def get_full_name(self) -> str:
+        return self.first_name + self.last_name
+
 
 @receiver(post_save, sender=User)
 def create_update_user_profile(sender, instance, created, **kwargs):
@@ -59,11 +62,11 @@ class Category(models.Model):
 
 
 class Quiz(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="quizzes")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="quizzes")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="quizzes_user")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="quizzes_cat")
     name = models.CharField(max_length=255)
     time_start = models.DateTimeField(default=timezone.now)
-    time_end = models.DateTimeField()
+    time_end = models.DateTimeField(null=True, blank=True)
     STATUS_CHOICES = (
         ('ongoing', 'Ongoing'),
         ('completed', 'Completed'),
@@ -73,21 +76,48 @@ class Quiz(models.Model):
     def __str__(self):
         return self.name
 
+    def calculate_duration(self):
+        if self.time_end:
+            return self.time_end - self.time_start
+        else:
+            # If the quiz is still ongoing, calculate duration up to the current time
+            return timezone.now() - self.time_start
+
+    def get_score(self):
+        correct_answers_count = self.quiz_questions_quiz.filter(user_choice__is_correct=True).count()
+        return correct_answers_count
+
+    def get_result(self):
+        score = self.get_score()
+        return 'Passed' if score >= 3 else 'Failed'
+
+    def get_user_name(self):
+        user = CustomUser.objects.get(pk=self.id)
+        full_name = user.get_full_name()
+        print(full_name, user)
+        return full_name
+
 
 class Question(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="questions")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="questions_cat")
     description = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
 
+    def get_correct_answer(self):
+        return self.choices_que.filter(is_correct=True).first()
+
+    def __str__(self):
+        return self.description
+
 
 class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="choices")
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="choices_que")
     description = models.CharField(max_length=255)
     is_correct = models.BooleanField()
     is_active = models.BooleanField(default=True)
 
 
 class QuizQuestion(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="quiz_questions")
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="quiz_questions")
-    user_choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name="quiz_questions")
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="quiz_questions_quiz")
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="quiz_questions_ques")
+    user_choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name="quiz_questions_user_choice",null=True, blank=True)

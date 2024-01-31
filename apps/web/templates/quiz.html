@@ -2,17 +2,17 @@
 
 {% block content %}
     <h1>{{ quiz.name }}</h1>
-    <form method="post">
+    <form method="post" %}>
         {% csrf_token %}
-        {% for question in questions %}
+        {% for q_with_c in questions %}
             <div>
-                <p>{{ question.question.description }}</p>
-                {% for choice in question.question.choices.all %}
-                    <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}">
+                <p>{{ q_with_c.description }}</p>
+                {% for choice in q_with_c.choices %}
+                    <input type="radio" name="question_{{ q_with_c.id }}" value="{{ choice.id }}">
                     <label>{{ choice.description }}</label><br>
                 {% endfor %}
             </div>
         {% endfor %}
         <button type="submit">Submit Quiz</button>
     </form>
-{%  endblock %}
+{% endblock %}

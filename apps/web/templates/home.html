@@ -5,7 +5,8 @@
     <h2>Quiz Categories</h2>
     <ul>
         {% for category in categories %}
-        <li>{{ category.name }}</li>
+{#        <li>{{ category.name }}</li>#}
+            <li><a href="{% url 'quiz' category_name=category.name %}">{{ category.name }}</a></li>
         {% endfor %}
     </ul>
 
@@ -16,13 +17,19 @@
             <tr>
                 <th>Quiz Name</th>
                 <th>Taken Time</th>
+                <th>Result</th>
+                <th>Detail</th>
                 <!-- Include other headers like 'Result' -->
             </tr>
             {% for quiz in user_quizzes %}
             <tr>
                 <td>{{ quiz.name }}</td>
-                <td>{{ quiz.time_start }}</td>
-                <!-- Include other details like 'Result' and link to result page -->
+                <td>{{ quiz.calculate_duration}}</td>
+                <td>{{ quiz.get_result }}</td>
+{#                <td><a href="{% url 'quiz_result' quiz_id=quiz.id %}">{{ quiz.category.name }}</a></td>#}
+                <td><a href="{% url 'quiz_result' pk=quiz.id %}">Link to Results</a></td>
+
+{#                <td><a>href="{% url 'quiz_result' pk=id %}</a>Link</td>#}
             </tr>
             {% endfor %}
         </table>

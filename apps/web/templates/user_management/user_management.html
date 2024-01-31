@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Quiz Count</th>
+            <th>is_active</th>
+            <th>Activate/Suspended</th>
+            <th>Quizzes</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.quiz_count }}</td>
+            <td>{{ user.is_active|yesno:"Active,Suspended" }}</td>
+            {%  if user.is_active %}
+                <td><button type="submit">Suspend</button></td>
+            {% else %}
+                <td><button type="submit">Activate</button></td>
+            {% endif %}
+            <td><a href="{% url 'user_quiz_management' %}">Quizzes</a></td>
+        </tr>
+    </table>
+    {% endfor %}
+{% endblock %}

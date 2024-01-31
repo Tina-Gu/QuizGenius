@@ -1,7 +1,7 @@
 from django import forms
 from django.urls import reverse_lazy
 from django import forms
-from .models import CustomUser, Quiz, Category
+from .models import CustomUser, Quiz, Category, Question, QuizQuestion, Choice
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
@@ -45,3 +45,11 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name', 'is_active']
+
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['category', 'description', 'is_active']
+
+

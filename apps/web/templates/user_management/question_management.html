@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Correct Answer</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td>{{ question.category.name }}</td>
+                <td>{{ question.description }}</td>
+                <td>{{ question.get_correct_answer }}</td>
+                <td>
+                    <a href="{% url 'question_detail' question.id %}">Detail</a>
+                    <a href="{% url 'question_edit' question.id %}">Edit</a>
+                    <form action="{% url 'question_toggle_active' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="question_id" value="{{ question.id }}">
+                        <input type="submit" name="toggle_active" value="{{ question.is_active|yesno:'Suspend,Activate' }}">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'question_add' %}">Add</a>
+{% endblock %}

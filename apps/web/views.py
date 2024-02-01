@@ -169,16 +169,17 @@ class QuizResultView(LoginRequiredMixin, DetailView):
 
 
 
-class UserListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
+class UserListView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
+    permission_required = 'web.view_question'
     model = User
     template_name = 'user_management/user_management.html'
     context_object_name = 'users'
     paginate_by = 5
 
-    def test_func(self):
-        user = self.request.user
-        # User must be a superuser or staff, or must have any specific permission
-        return user.is_superuser or user.is_staff or user.has_perm('web.change_profile')
+    # def test_func(self):
+    #     user = self.request.user
+    #     # User must be a superuser or staff, or must have any specific permission
+    #     return user.is_superuser or user.is_staff or user.has_perm('web.change_profile')
 
     def get_queryset(self):
         return User.objects.annotate(quiz_count=Count('quizzes_user'))
@@ -191,24 +192,21 @@ class UserListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
         return redirect('user_management')
 
 
-class UserQuizListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
+class UserQuizListView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
+    permission_required = 'web.view_quiz'
     model = Quiz
     template_name = 'user_management/user_quiz_management.html'
     context_object_name = 'quizzes'
     ordering = ['-time_start']
-
-    def test_func(self):
-        user = self.request.user
-        # User must be a superuser or staff, or must have any specific permission
-        return user.is_superuser or user.is_staff or user.has_perm('web.change_quiz')
 
     def get_queryset(self):
         queryset = super().get_queryset()
         user = self.request.user
         user_filter = self.request.GET.get('user_id')
         print(user_filter)
-        if user_filter and user.is_authenticated and (user.is_staff or user.is_superuser):
-            queryset = queryset.filter(user__id=user_filter)
+        if user.is_authenticated and (user.is_staff or user.is_superuser):
+            if user_filter:
+                queryset = queryset.filter(user__id=user_filter)
             # If user is staff or superuser and no 'user_id' parameter, show all quizzes
             category_filter = self.request.GET.get('category')
             if category_filter:
@@ -217,15 +215,11 @@ class UserQuizListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
         return queryset
 
 
-class UserQuestionListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
+class UserQuestionListView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
+    permission_required = 'web.view_quizquestion'
     model = Question
     template_name = 'user_management/question_management.html'
     context_object_name = 'questions'
-
-    def test_func(self):
-        user = self.request.user
-        # User must be a superuser or staff, or must have any specific permission
-        return user.is_superuser or user.is_staff or user.has_perm('web.change_question')
 
     def post(self, request, *args, **kwargs):
         question_id = request.POST.get('question_id')
@@ -237,29 +231,24 @@ class UserQuestionListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
         return redirect('question_management')
 
 
-class QuestionDetailListView(LoginRequiredMixin,UserPassesTestMixin,DetailView):
+class QuestionDetailListView(LoginRequiredMixin,PermissionRequiredMixin,DetailView):
+    permission_required = 'web.view_questiondetail'
     model = Question
     template_name = 'user_management/question_detail.html'
     context_object_name = 'question'
-
-    def test_func(self):
-        user = self.request.user
-        # User must be a superuser or staff, or must have any specific permission
-        return user.is_superuser or user.is_staff or user.has_perm('web.change_question')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['choices'] = self.object.choices_que.all()  # Assuming related_name='choices_que' in Choice model
         return context
 
-class QuestionEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class QuestionEditView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = 'web.change_question'
     model = Question
     form_class = QuestionForm
     template_name = 'user_management/question_edit.html'
     success_url = reverse_lazy('question_management')
 
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -319,7 +308,8 @@ class QuestionEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     #
 
 
-class QuestionAddView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class QuestionAddView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = 'web.add_question'
     model = Question
     form_class = QuestionForm
     template_name = 'user_management/question_add.html'
@@ -332,9 +322,6 @@ class QuestionAddView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         extra=3,  # Specify how many choice forms want to present
         can_delete=True
     )
-
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

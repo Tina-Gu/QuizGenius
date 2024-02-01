@@ -23,6 +23,8 @@
 {#{% endblock %}#}
 
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
 {% block content %}
     <form method="post">
         {% csrf_token %}
@@ -30,7 +32,7 @@
         {{ choices_formset.management_form }}
         {% for choice_form in choices_formset %}
             <div class="choice-form">
-                {{ choice_form.as_p }}
+                {{ choice_form | crispy }}
             </div>
         {% endfor %}
         <button type="submit">Save changes</button>

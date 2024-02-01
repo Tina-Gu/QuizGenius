@@ -1,10 +1,43 @@
-develop a quiz application that allows users to take quizzes and view their results. 
-User can only take one quiz at a time. User will choose a quiz category and start the quiz. 
-The quiz will be randomly generated from the questions in the chosen category. 
-After the user completes the quiz, the system will display the result of the quiz.
-The user can view the result of the quiz and the result of each question. 
-The user can also view the result of all the quizzes that he/she has taken.
-Questions should be randomly assigned to each quiz
-Each quiz has 5 multiple choice questions
-Only one quiz can be taken at a time
-If the correct answer of a question is changed, the corresponding quiz results will also be updated accordingly
+# Quiz Genius
+## Overview
+Quiz Genius is a Django-based web application designed for users to take quizzes and view their results. Leveraging Django's ORM, MVT design pattern, built-in authentication, and class-based views, this project offers a comprehensive quiz platform.
+
+## Features
+
+**Quiz Taking:** Users can take quizzes with multiple-choice questions.
+**Results Viewing:** After completing quizzes, users can view their results.
+**User Authentication:** Built-in Django authentication for user management.
+**Admin Interface:** Staff members can manage quizzes, questions, categories, and user roles.
+**Responsive Design:** Utilizes Bootstrap for a polished, mobile-friendly interface.
+
+## Installation
+Intstall needed requirement by using pip or docker
+```
+# pip
+$ pip install -r requirements.txt
+
+# docker
+docker build -t QuizGenius .
+$ docker-compose up
+```
+Migrate the database
+```
+$ python manage.py migrate
+```
+Run Server
+```
+$ python manage.py runserver
+```
+
+## Usage
+**Registration and Login:** Users must register and log in to take quizzes.
+**Taking Quizzes:** Accessible from the homepage, users can select and take quizzes.
+**Viewing Results:** Users can view detailed results of their quizzes.
+**Admin Functions:** Admins can add, edit, or delete quizzes, questions, and categories through the Django admin page.
+
+
+
+
+
+
+

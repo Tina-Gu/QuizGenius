@@ -53,3 +53,20 @@ class QuestionForm(forms.ModelForm):
         fields = ['category', 'description', 'is_active']
 
 
+class ChoiceForm(forms.ModelForm):
+    DELETE = forms.BooleanField(required=False, initial=False, widget=forms.CheckboxInput())
+
+    class Meta:
+        model = Choice
+        fields = ['description', 'is_correct', 'is_active', 'DELETE']
+        labels = {
+            'description': 'Choice',
+            'is_correct': 'Correct Answer',
+            'DELETE': 'Delete',
+        }
+        widgets = {
+            'is_correct': forms.RadioSelect(),
+        }
+
+
+

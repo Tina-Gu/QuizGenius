@@ -7,7 +7,7 @@
             <input type="text" name="category" id="category">
 
             <label for="user">User:</label>
-            <input type="text" name="user" id="user">
+            <input type="int" name="user_id" id="user_id">
 
             <button type="submit">Filter</button>
         </form>
@@ -28,9 +28,10 @@
             <tr onclick="window.location.href='{% url 'quiz_result' quiz.id %}';">
                 <td>{{ quiz.calculate_duration }}</td>
                 <td>{{ quiz.category.name }}</td>
-                <td>{{ quiz.get_user_name }}</td>
+                <td>{{ quiz.user.get_full_name }}</td>
                 <td>{{ quiz.get_score }}</td>
                 <td><a href="{% url 'quiz_result' quiz.id%}">{{ quiz.get_result }}</a></td>
+
             </tr>
             {% endfor %}
         </tbody>

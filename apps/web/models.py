@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -108,6 +109,9 @@ class Question(models.Model):
 
     def __str__(self):
         return self.description
+
+    def get_absolute_url(self):
+        return reverse('question_detail', kwargs={'pk': self.pk})
 
 
 class Choice(models.Model):

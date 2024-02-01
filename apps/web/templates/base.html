@@ -10,53 +10,40 @@
 <body>
     <nav>
         <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
             {% if user.is_authenticated %}
-                <form action="{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                </form>
-            {%  else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
-            {%  endif %}
-            <li><a href="{% url 'register' %}">Register</a></li>
-            <li><a href="{% url 'user_management' %}">User Management</a></li>
-            <li><a href="{% url 'user_quiz_management' %}">Quiz Result Management</a></li>
-            <li><a href="{% url 'question_management' %}">Question Management</a></li>
-{#            <li><a href="{% url 'category_management' %}">Category Management</a></li>#}
-
-
-{#                <li><a href="{% url 'logout' %}">Log out</a> # deprecated after Django 4.1</li>#}
-{#            {% else %}#}
-{#            {% if user.is_authenticated %}#}
-{#                <li><a href="{% url 'home' %}">Home</a></li>#}
-{#                {% if user.has_open_quiz %}#}
-{#                    <!-- Replace 'has_open_quiz' with the actual method to determine if the user has an open quiz -->#}
-{#                    <li><a href="{% url 'taking_quiz' %}">Taking Quiz</a></li>#}
-{#                {% endif %}#}
-{#                {% if user.has_perm('quiz.manage_quiz') %}#}
-{#                    <li><a href="{% url 'quiz_management' %}">Quiz Management</a></li>#}
-{#                {% endif %}#}
-{#                {% if user.has_perm('question.manage_question') %}#}
-{#                    <li><a href="{% url 'question_management' %}">Question Management</a></li>#}
-{#                {% endif %}#}
-{#                {% if user.has_perm('category.manage_category') %}#}
-{#                    <li><a href="{% url 'category_management' %}">Category Management</a></li>#}
-{#                {% endif %}#}
-{#                {% if user.has_perm('user.manage_user') %}#}
+{#                {%  if user.quiz.status == 'ongoing' %}#}
 {#                    <li><a href="{% url 'user_management' %}">User Management</a></li>#}
 {#                {% endif %}#}
-{#                <li><a href="{% url 'logout' %}">Logout</a></li>#}
-{#            {% else %}#}
-{#                <li><a href="{% url 'login' %}">Login</a></li>#}
-{#                <li><a href="{% url 'registration' %}">Register</a></li>#}
-{#            {% endif %}#}
-{#            <form action="{% url 'logout' %}" method="post">#}
-{#                {% csrf_token %}#}
-{#                <button type="submit">Logout</button>#}
-{#            </form>#}
-        </ul>
+                {% if user.is_staff or user.is_superuser %}
+                    <!-- Show links for staff or superusers -->
+                    <li><a href="{% url 'user_management' %}">User Management</a></li>
+                    <li><a href="{% url 'user_quiz_management' %}">Quiz Result Management</a></li>
+                    <li><a href="{% url 'question_management' %}">Question Management</a></li>
+                {% else %}
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <!-- For regular users, show based on permissions -->
+                    {% if perms.web.change_profile %}
+                        <li><a href="{% url 'user_management' %}">User Management</a></li>
+                    {% endif %}
+                    {% if perms.web.change_quiz %}
+                        <li><a href="{% url 'user_quiz_management' %}">Quiz Management</a></li>
+                    {% endif %}
+                    {% if perms.web.change_question %}
+                        <li><a href="{% url 'question_management' %}">Question Management</a></li>
+                    {% endif %}
 
+
+                {% endif %}
+                <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                </form>
+            {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'register' %}">Register</a></li>
+            {% endif %}
+
+        </ul>
     </nav>
 
     {% block content %}

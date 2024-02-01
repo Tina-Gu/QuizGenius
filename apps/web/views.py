@@ -11,14 +11,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
-from .forms import CustomUserCreationForm
+from django.views.generic.edit import UpdateView
+from .forms import *
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.db.models import Count
+from django.forms.models import inlineformset_factory
 
 
 # Create your views here.
 User = get_user_model()
+user = User.objects.get(username='user02')
+print(user.get_all_permissions())
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
@@ -29,7 +33,11 @@ class SignUpView(CreateView):
 class MyLoginView(LoginView):
     template_name = "registration/login.html"
     redirect_authenticated_user = True
-    success_url = reverse_lazy("home")
+    def get_success_url(self):
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            return reverse_lazy("user_management")
+        else:
+            return reverse_lazy("home")
 
 
 class home(LoginRequiredMixin, ListView):
@@ -52,7 +60,7 @@ class home(LoginRequiredMixin, ListView):
 class QuizStartView(LoginRequiredMixin, View):
     def get(self, request, category_name):
         category = get_object_or_404(Category, name=category_name)
-        ongoing_quiz = Quiz.objects.filter(user=request.user, category=category, status='ongoing').first()
+        ongoing_quiz = Quiz.objects.filter(user=request.user, status='ongoing').first()
 
         if ongoing_quiz:
             return redirect('quiz', category_name=category_name, quiz_id=ongoing_quiz.id)
@@ -143,17 +151,17 @@ class QuizResultView(LoginRequiredMixin, DetailView):
         duration = quiz.time_end - quiz.time_start
         quiz_questions = QuizQuestion.objects.filter(quiz=quiz)
         correct_count = quiz_questions.filter(user_choice__is_correct=True).count()
-        # context['score'] = round(self.request.session.get('correct_count', 0) / 5, 2)
+
         context['score'] = round(quiz.get_score() / 5, 2) * 100
         context['category'] = quiz.category
         context['passed'] = quiz.get_result()
-
 
         context['results'] = [
             {
                 'question': qq.question.description,
                 'selected_choice': qq.user_choice.description if qq.user_choice else None,
-                'correct_choice': qq.question.get_correct_answer().description
+                'correct_choice': qq.question.get_correct_answer().description,
+                'all_choices': [choice.description for choice in qq.question.choices_que.all()]
             }
             for qq in quiz_questions
         ]
@@ -161,59 +169,188 @@ class QuizResultView(LoginRequiredMixin, DetailView):
 
 
 
-class UserListView(ListView):
+class UserListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
     model = User
     template_name = 'user_management/user_management.html'
     context_object_name = 'users'
     paginate_by = 5
+
+    def test_func(self):
+        user = self.request.user
+        # User must be a superuser or staff, or must have any specific permission
+        return user.is_superuser or user.is_staff or user.has_perm('web.change_profile')
 
     def get_queryset(self):
         return User.objects.annotate(quiz_count=Count('quizzes_user'))
 
     def post(self, request, *args, **kwargs):
         user_id = request.POST.get('user_id')
-        user = User.objects.get(id=user_id)
+        user = get_object_or_404(User, id=user_id)
         user.is_active = not user.is_active
         user.save()
-        return redirect('some-view-name')  # Redirect to the appropriate view
+        return redirect('user_management')
 
 
-class UserQuizListView(ListView):
+class UserQuizListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
     model = Quiz
     template_name = 'user_management/user_quiz_management.html'
     context_object_name = 'quizzes'
     ordering = ['-time_start']
 
+    def test_func(self):
+        user = self.request.user
+        # User must be a superuser or staff, or must have any specific permission
+        return user.is_superuser or user.is_staff or user.has_perm('web.change_quiz')
+
     def get_queryset(self):
         queryset = super().get_queryset()
         user = self.request.user
-
-        if user.is_authenticated and (user.is_staff or user.is_superuser):
+        user_filter = self.request.GET.get('user_id')
+        print(user_filter)
+        if user_filter and user.is_authenticated and (user.is_staff or user.is_superuser):
+            queryset = queryset.filter(user__id=user_filter)
+            # If user is staff or superuser and no 'user_id' parameter, show all quizzes
             category_filter = self.request.GET.get('category')
-            user_filter = self.request.GET.get('user')
-
             if category_filter:
                 queryset = queryset.filter(category__name=category_filter)
-            if user_filter:
-                queryset = queryset.filter(user__username=user_filter)
 
         return queryset
 
 
-class UserQuestionListView(UserPassesTestMixin, ListView):
+class UserQuestionListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
     model = Question
     template_name = 'user_management/question_management.html'
     context_object_name = 'questions'
 
     def test_func(self):
-        return self.request.user.is_superuser
+        user = self.request.user
+        # User must be a superuser or staff, or must have any specific permission
+        return user.is_superuser or user.is_staff or user.has_perm('web.change_question')
 
     def post(self, request, *args, **kwargs):
+        question_id = request.POST.get('question_id')
+        question = get_object_or_404(Question, pk=question_id)
+
         if 'toggle_active' in request.POST:
-            question = Question.objects.get(id=request.POST.get('question_id'))
             question.is_active = not question.is_active
             question.save()
         return redirect('question_management')
 
-class QuestionDetailListView(ListView):
+
+class QuestionDetailListView(LoginRequiredMixin,UserPassesTestMixin,DetailView):
     model = Question
+    template_name = 'user_management/question_detail.html'
+    context_object_name = 'question'
+
+    def test_func(self):
+        user = self.request.user
+        # User must be a superuser or staff, or must have any specific permission
+        return user.is_superuser or user.is_staff or user.has_perm('web.change_question')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['choices'] = self.object.choices_que.all()  # Assuming related_name='choices_que' in Choice model
+        return context
+
+class QuestionEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Question
+    form_class = QuestionForm
+    template_name = 'user_management/question_edit.html'
+    success_url = reverse_lazy('question_management')
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = self.ChoiceFormSet(self.request.POST, instance=self.object)
+        else:
+            context['formset'] = self.ChoiceFormSet(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid():
+
+            self.object = form.save()  # Save the Question
+
+            # Iterate over the forms in the formset to save each choice
+            for form in formset:
+                choice = form.save(commit=False)
+                # Set the correct answer based on a radio button or another method
+                if form.cleaned_data.get('is_correct'):
+                    # Unset the previous correct answer
+                    Choice.objects.filter(question=self.object, is_correct=True).update(is_correct=False)
+                    # Set the new correct answer
+                    choice.is_correct = True
+                choice.question = self.object
+                choice.save()
+            formset.save_m2m()  # Save many-to-many data for the formset
+            return redirect(self.success_url)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+    @property
+    def ChoiceFormSet(self):
+        # This property will now ensure the inline formset uses ChoiceForm
+        return inlineformset_factory(Question, Choice, form=ChoiceForm, extra=1, can_delete=True)
+
+
+    # def post(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #
+    #     new_description = request.POST.get('question_description', '')
+    #     if new_description:
+    #         self.object.description = new_description
+    #         self.object.save()
+    #
+    #     # Now handle the choices and correct answer
+    #     for choice in self.object.choices_que.all():
+    #         choice_description = request.POST.get(f'choice_{choice.id}')
+    #         correct_field = request.POST.get(f'correct_{choice.id}', '') == 'correct'
+    #         correct_choice_id = request.POST.get('correct_answer')
+    #         if choice_description:
+    #             choice.description = choice_description
+    #             choice.is_correct = str(choice.id) == correct_choice_id  # Update is_correct based on the checkbox
+    #             choice.save()
+    #     return redirect('question_management')
+    #
+
+
+class QuestionAddView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Question
+    form_class = QuestionForm
+    template_name = 'user_management/question_add.html'
+    success_url = reverse_lazy('question_management')
+
+    ChoiceFormSet = inlineformset_factory(
+        Question,
+        Choice,
+        fields=('description', 'is_correct'),
+        extra=3,  # Specify how many choice forms want to present
+        can_delete=True
+    )
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            context['choices_formset'] = self.ChoiceFormSet(self.request.POST)
+        else:
+            context['choices_formset'] = self.ChoiceFormSet()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        choices_formset = context['choices_formset']
+        if choices_formset.is_valid():
+            self.object = form.save()  # Save the question first
+            choices_formset.instance = self.object  # Link formset to question
+            choices_formset.save()  # Save the choices
+            return redirect(self.success_url)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))

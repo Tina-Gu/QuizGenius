@@ -13,6 +13,21 @@ class QuizInline(admin.TabularInline):
     model = Quiz
 
 
+class QuestionInline(admin.TabularInline):
+    model = Question
+    extra = 1  # How many empty forms to display
+
+
+class ChoiceInline(admin.TabularInline):
+    model = Choice
+    extra = 3
+
+
+class QuizQuestionInline(admin.TabularInline):
+    model = QuizQuestion
+    extra = 1  # How many extra fo
+
+
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -24,25 +39,26 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('Profile', {'fields': ('phone',)}),
     )
-    inlines = [QuizInline]
+    # inlines = [QuizInline]
 
 
 class QuizAdmin(admin.ModelAdmin):
     list_display = ['user', 'name', 'category', 'time_start', 'time_end']
-    list_filter = ['category', ]  # Filters you can use on the side of the list page
-    search_fields = ['name', 'category']  # Fields that can be searched
-    ordering = ['-time_start', ]  # Default ordering
-    fields = ['name' 'category', 'time_start', 'time_end']  # Fields in the form view
-    readonly_fields = ['time_start', 'time_end']  # Fields that are read-only in the form view
+    list_filter = ['category',]
+    search_fields = ['name', 'category']
+    ordering = ['-time_start',]
+    fields = ['name', 'category', 'time_start', 'time_end']
+    # readonly_fields = ['time_start', 'time_end']
+    inlines = [QuizQuestionInline]
+
+    def save_model(self, request, obj, form, change):
+        if not obj.user_id:
+            obj.user = request.user
+        super().save_model(request, obj, form, change)
 
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'is_active']
-
-
-class ChoiceInline(admin.TabularInline):
-    model = Choice
-    extra = 3
 
 
 class QuestionAdmin(admin.ModelAdmin):

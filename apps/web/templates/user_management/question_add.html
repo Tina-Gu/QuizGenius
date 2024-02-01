@@ -1,0 +1,39 @@
+{#{% extends 'base.html' %}#}
+{#{% block content %}#}
+{##}
+{#    <form method="post">#}
+{#        {% csrf_token %}#}
+{#        <h2>Question: <input type='text'  name="question_description"></h2>#}
+{#        <p>Choices:</p>#}
+{#        <ul>#}
+{#        {% for choice in question.choices_que.all %}#}
+{#            <li><input type='text' value='{{ choice.description }}' name="choice_{{ choice.id }}"></li>#}
+{#            <label>#}
+{#                <input type="radio" value="{{ choice.id }}" name="correct_answer"#}
+{#                {% if choice.is_correct %} checked {% endif %}>#}
+{#                Correct Answer#}
+{#            </label>#}
+{#        {% endfor %}#}
+{#        </ul>#}
+{##}
+{#        <input type="hidden" name="question_id" value="{{ question.id }}">#}
+{#        <button type="submit" name="edit">Edit</button>#}
+{#    </form>#}
+{##}
+{#{% endblock %}#}
+
+{% extends 'base.html' %}
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ choices_formset.management_form }}
+        {% for choice_form in choices_formset %}
+            <div class="choice-form">
+                {{ choice_form.as_p }}
+            </div>
+        {% endfor %}
+        <button type="submit">Save changes</button>
+    </form>
+{% endblock %}
+

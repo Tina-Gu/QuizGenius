@@ -11,18 +11,25 @@
             <th>Quizzes</th>
         </tr>
         {% for user in users %}
-        <tr>
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.quiz_count }}</td>
-            <td>{{ user.is_active|yesno:"Active,Suspended" }}</td>
-            {%  if user.is_active %}
-                <td><button type="submit">Suspend</button></td>
-            {% else %}
-                <td><button type="submit">Activate</button></td>
-            {% endif %}
-            <td><a href="{% url 'user_quiz_management' %}">Quizzes</a></td>
-        </tr>
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.quiz_count }}</td>
+                <td>{{ user.is_active|yesno:"Active,Suspended" }}</td>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    {%  if user.is_active %}
+                        <td><button type="submit">Suspend</button></td>
+                    {% else %}
+                        <td><button type="submit">Activate</button></td>
+                    {% endif %}
+                </form>
+{#                <td><a href="{% url 'user_quiz_management' %}">Quizzes</a></td>#}
+                <td><a href="{% url 'user_quiz_management' %}?user_id={{ user.id }}">Quizzes</a></td>
+
+            </tr>
+        {% endfor %}
     </table>
-    {% endfor %}
+
 {% endblock %}

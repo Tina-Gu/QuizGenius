@@ -19,6 +19,7 @@
     <thead>
         <tr>
             <th>Question</th>
+            <th>Choices</th>
             <th>Selected Answer</th>
             <th>Correct Answer</th>
         </tr>
@@ -27,6 +28,7 @@
         {% for result in results %}
             <tr>
                 <td>{{ result.question }}</td>
+                <td> {{ result.all_choices }}</td>
                 <td>{{ result.selected_choice }}</td>
                 <td>{{ result.correct_choice }}</td>
             </tr>

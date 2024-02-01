@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <h2>Question: </h2>
+    <h2>{{ question.description }}</h2>
+    <p>Category: {{ question.category }}</p>
+    <p>Status: {{ question.is_active|yesno:"Active,Suspended" }}</p>
+    <p>Choices:</p>
+    <ul>
+    {% for choice in choices %}
+        <li>{{ choice.description }}</li>
+    {% endfor %}
+    </ul>
+
+    <p>Correct Answer: {{ question.get_correct_answer.description }}</p>
+{% endblock %}

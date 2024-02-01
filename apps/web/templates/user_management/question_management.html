@@ -7,27 +7,46 @@
                 <th>Category</th>
                 <th>Description</th>
                 <th>Correct Answer</th>
-                <th>Actions</th>
+                <th>Question Detail</th>
+                {% if user.is_superuser or user.is_staff %}
+                    <th>Edit</th>
+                {%  endif %}
+                <th>Status</th>
+                <th>Active/Suspend</th>
             </tr>
         </thead>
         <tbody>
             {% for question in questions %}
-            <tr>
-                <td>{{ question.category.name }}</td>
-                <td>{{ question.description }}</td>
-                <td>{{ question.get_correct_answer }}</td>
-                <td>
-                    <a href="{% url 'question_detail' question.id %}">Detail</a>
-                    <a href="{% url 'question_edit' question.id %}">Edit</a>
-                    <form action="{% url 'question_toggle_active' %}" method="post">
+                <tr>
+                    <td>{{ question.category.name }}</td>
+                    <td>{{ question.description }}</td>
+                    <td>{{ question.get_correct_answer.description }}</td>
+                    <td><a href="{% url 'question_detail' question.id %}">Detail</a></td>
+
+                    {% if user.is_superuser or user.is_staff %}
+                        <td>
+                            <form method="get" action="{% url 'question_edit' question.id %}">
+{#                                {% csrf_token %}#}
+                                <button type="submit" name="edit">Edit</button>
+                            </form>
+                        </td>
+                    {% endif %}
+
+                    <td>{{ question.is_active|yesno:"Active,Suspended" }}</td>
+                    <form method="post" action="">
                         {% csrf_token %}
                         <input type="hidden" name="question_id" value="{{ question.id }}">
-                        <input type="submit" name="toggle_active" value="{{ question.is_active|yesno:'Suspend,Activate' }}">
+                        <td><button type="submit" name="toggle_active">{{ question.is_active|yesno:"Suspend,Activate" }}</button></td>
                     </form>
-                </td>
-            </tr>
+
+                </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'question_add' %}">Add</a>
+    {% if user.is_superuser or user.is_staff %}
+        <form method="get" action="{% url 'question_add' %}">
+            {% csrf_token %}
+            <button type="submit" name="add_question">Add New Question</button>
+        </form>
+    {% endif %}
 {% endblock %}

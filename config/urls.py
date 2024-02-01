@@ -22,7 +22,7 @@ from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", home.as_view(), name="home"),
+    path("", MyLoginView.as_view(template_name='registration/login.html'), name="login"),
     path("home/", home.as_view(), name="home"),
     path("login/", MyLoginView.as_view(template_name='registration/login.html'), name="login"),
     path("signup/", SignUpView.as_view(), name="register"),
@@ -34,4 +34,6 @@ urlpatterns = [
     path('user_quiz_management/', UserQuizListView.as_view(), name='user_quiz_management'),
     path('question_management/', UserQuestionListView.as_view(), name='question_management'),
     path('question_detail/<int:pk>', QuestionDetailListView.as_view(), name='question_detail'),
+    path('question_detail/<int:pk>/edit', QuestionEditView.as_view(), name='question_edit'),
+    path('question_detail/add/', QuestionAddView.as_view(), name='question_add'),
 ]
